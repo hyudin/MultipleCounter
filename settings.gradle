@@ -13,4 +13,8 @@ dependencyResolutionManagement {
     }
 }
 rootProject.name = "MultipleCounter"
-include ':Multiple-Counter-App'
+include 'Multiple-Counter-App'
+include 'Multiple-Counter-App'
+
+include ':multiplecounterapp'
+include ':features:multiple_counter'
