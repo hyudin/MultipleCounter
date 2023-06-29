@@ -9,7 +9,7 @@ import androidx.recyclerview.widget.RecyclerView
 import br.com.hyudin.multiple_counter.R
 import br.com.hyudin.multiple_counter.di.model.Counter
 
-class MultipleCounterAdapter(private val listOfCounters: ArrayList<Counter>, private val onClickListener: OnClickListener) :
+class MultipleCounterAdapter(private var listOfCounters: ArrayList<Counter>, private val onClickListener: OnClickListener) :
     RecyclerView.Adapter<MultipleCounterAdapter.ViewHolder>() {
 
     /**
@@ -41,11 +41,15 @@ class MultipleCounterAdapter(private val listOfCounters: ArrayList<Counter>, pri
     }
 
     override fun getItemCount(): Int {
-        return 1
+        return listOfCounters.size
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val counter = listOfCounters[position]
+        holder.textView_name.setOnLongClickListener {
+            onClickListener.onClick(counter,position,"remove")
+            return@setOnLongClickListener true
+        }
         holder.textView_counter.text = counter.count.toString()
         holder.textView_name.text = counter.name
         holder.button_minus.setOnClickListener { onClickListener.onClick(counter, position,"plus") }
@@ -54,6 +58,22 @@ class MultipleCounterAdapter(private val listOfCounters: ArrayList<Counter>, pri
 
     class OnClickListener(val clickListener: (counter: Counter, position: Int, action: String) -> Unit) {
         fun onClick(counter: Counter,position: Int, action:String) = clickListener(counter,position, action)
+    }
+
+    fun addCounter(newCounter: Counter){
+        this.listOfCounters.add(newCounter)
+    }
+
+    fun removeCounter(position: Int){
+        this.listOfCounters.removeAt(position)
+    }
+
+    fun addCount(position: Int){
+        this.listOfCounters[position].count += 1
+    }
+
+    fun decreaseCount(position: Int){
+        this.listOfCounters[position].count -= 1
     }
 
 }
